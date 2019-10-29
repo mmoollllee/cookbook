@@ -1,5 +1,5 @@
 const apiURL = "https://www.themealdb.com/api/json/v1/1/"; // https://www.themealdb.com/api/json/v1/1/filter.php?i=chicken_breast
-const mainKey = "meals";
+const mainKey = "meals"; // ToDo: Make a function for key change.
 const resultContainer = document.getElementById("meals");
 
 function fetchJSON(url) {
@@ -19,6 +19,9 @@ function fetchJSON(url) {
 }
 
 function createCard(title, thumb) {
+
+   // ToDo: Structure as HTML Tree
+
    let card = document.createElement("article");
    let cardFigure = document.createElement("figure");
    let cardImage = document.createElement("img");
@@ -39,7 +42,7 @@ function createCard(title, thumb) {
 }
 
 function showDetail(apiURL, id) {
-
+   // ToDo: Use global apiURL here
    let detailResponse = fetchJSON (apiURL + "lookup.php?i=" + id);
    
    detailResponse.then(function (data) {
@@ -48,37 +51,51 @@ function showDetail(apiURL, id) {
 }
 
 function searchInit(apiURL, mainKey, resultContainer) {
+
+   let resultContainerInner = resultContainer.querySelector(".inner");
+   let resultContainerHeading = resultContainer.querySelector("h2");
    
    document.querySelector("#search form").addEventListener("submit", function(e) {
       e.preventDefault();
+
+      // ToDo: Create recuring showResults Function to increase readability
+      // function showResults (heading, contents) {
+      //    resultContainer.querySelector(".inner").textContent = heading;
+      
+      //    if (contents) 
+      
+      //    else
+         
+      
+      // }
+      
 
       let value = this.querySelector("input[type='text']").value;
 
       if (!value) { return }
 
-      let resultContainerInner = resultContainer.querySelector(".inner");
-      let resultContainerHeading = resultContainer.querySelector("h2");
-
-      // empty the results.
-      resultContainerInner.innerHTML = "";
-
       // Check if value is meant for multiple ingredients.
       if (value.includes(" ") && value[value.length-1] != " " || value.includes(",")) {
+         resultContainerInner.innerHTML = "";
          resultContainerHeading.textContent = "Ey! I told you. Only use one ingredient or pay !%#]{}[.";
          return;
       }
 
       let listResponse = fetchJSON (apiURL + "filter.php?i=" + value);
+      resultContainerInner.innerHTML = "";
       resultContainerHeading.textContent = "Loading everything with " + value;
 
       listResponse.then(function (data) {
+         // ToDo: Function for keymapping
          let meals = data[mainKey];
 
          if ( !meals ) {
+            resultContainerInner.innerHTML = "";
             resultContainerHeading.textContent = "Nothing with " + value + ". Seems like you have a bad taste?";
             return;
          }
          
+         resultContainerInner.innerHTML = "";
          resultContainerHeading.textContent = "This is what we have with " + value;
 
          for (meal of meals) {
@@ -93,6 +110,8 @@ function searchInit(apiURL, mainKey, resultContainer) {
 }
 
 function init() {
+
+   // ToDo: no need
    searchInit(apiURL, mainKey, resultContainer);
 }
 
